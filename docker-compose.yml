@@ -1,0 +1,10 @@
+version: '2'
+services:
+  api:
+    build:
+      context: ./api
+    expose:
+      - "3000"
+    entrypoint: ./entry.sh
+    volumes:
+      - ./api:/var/www/api
