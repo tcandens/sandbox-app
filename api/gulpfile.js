@@ -14,7 +14,7 @@ gulp.task('build-ts', function() {
     .pipe(gulp.dest("build"))
 })
 
-gulp.task('dev', ['build-ts'], function() {
+gulp.task('default', ['build-ts'], function() {
   gulp.watch('src/**/*.ts', ['build-ts'])
   nodemon({
     script: 'build/index.mjs',

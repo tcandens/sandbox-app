@@ -1,9 +1,5 @@
-import Koa from 'koa'
+import app from './app'
 
-const app = new Koa()
+const PORT = process.env.PORT || 3000
 
-app.use(async ctx => {
-  ctx.body = 'Hello Friend'
-})
-
-app.listen(8080)
+app.listen(PORT)

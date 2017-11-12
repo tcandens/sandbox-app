@@ -2,15 +2,20 @@
   "name": "trainer-server",
   "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/index.mjs",
   "scripts": {
-    "start": "./node_modules/.bin/gulp dev",
+    "start": "./node_modules/.bin/gulp",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engines": {
+    "node": "^8.9.1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/koa": "^2.0.40",
+    "@types/node": "^8.0.51",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
     "gulp-rename": "^1.2.2",
