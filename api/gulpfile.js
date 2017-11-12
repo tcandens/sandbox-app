@@ -8,17 +8,17 @@ const tsProject = ts.createProject('tsconfig.json')
 gulp.task('build-ts', function() {
   gulp.src('src/**/*.ts')
     .pipe(tsProject())
-    .pipe(rename({
-      extname: '.mjs',
-    }))
+    // .pipe(rename({
+    //   extname: '.mjs',
+    // }))
     .pipe(gulp.dest("build"))
 })
 
 gulp.task('default', ['build-ts'], function() {
   gulp.watch('src/**/*.ts', ['build-ts'])
   nodemon({
-    script: 'build/index.mjs',
-    ext: 'mjs',
-    nodeArgs: ['--experimental-modules']
+    script: 'build/index.js',
+    // ext: 'mjs',
+    // nodeArgs: ['--experimental-modules']
   })
 })
