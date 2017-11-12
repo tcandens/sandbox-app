@@ -2,6 +2,7 @@ import * as Koa from 'koa'
 import * as Router from 'koa-router'
 import * as graphqlHTTP from 'koa-graphql'
 import { buildSchema } from 'graphql'
+import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 
 import { router as maintenanceRouter } from './maintenance'
 
@@ -9,26 +10,17 @@ const rootRouter = new Router()
 
 rootRouter.use(maintenanceRouter.routes())
 
-const schema = buildSchema(`
-  type Exercise {
-    id: Int!
-    name: String!
-  }
-  type Query {
-    getExercises: [Exercise]
-  }
-`)
+import * as exercise from './exercise'
 
-const EXERCISES = [
-  { id: 1, name: 'Crunches' },
-  { id: 2, name: 'Dips' },
-]
+const typeDefs = mergeTypes([
+  exercise.types,
+])
 
-const root = {
-  getExercises: () => {
-    return EXERCISES
-  },
-}
+const root = mergeResolvers([
+  exercise.resolvers,
+])
+
+const schema = buildSchema(typeDefs)
 
 rootRouter.all('/graphql', graphqlHTTP({
   schema,
