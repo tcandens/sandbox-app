@@ -1,11 +1,15 @@
 import * as Koa from 'koa'
 import * as Router from 'koa-router'
+import * as pino from 'koa-pino-logger'
 import * as graphqlHTTP from 'koa-graphql'
 import { buildSchema } from 'graphql'
+import maintenanceRouter from './features/maintenance/router'
 
 const PORT = process.env.PORT
 
 const app = new Koa()
+app.use(pino())
+
 const router = new Router()
 
 const schema = buildSchema(`
@@ -34,6 +38,8 @@ router.all('/graphql', graphqlHTTP({
   rootValue: root,
   graphiql: true,
 }))
+
+router.use(maintenanceRouter.routes())
 
 app.use(router.routes()).use(router.allowedMethods())
 

@@ -17,6 +17,7 @@
     "@types/graphql": "^0.11.6",
     "@types/koa": "^2.0.40",
     "@types/node": "^8.0.51",
+    "@types/sequelize": "^4.0.79",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
     "gulp-rename": "^1.2.2",
@@ -26,9 +27,15 @@
     "typescript": "^2.5.3"
   },
   "dependencies": {
+    "chalk": "^2.3.0",
     "graphql": "^0.11.7",
     "koa": "^2.3.0",
     "koa-graphql": "^0.7.3",
-    "koa-router": "^7.2.1"
+    "koa-pino-logger": "^2.1.1",
+    "koa-router": "^7.2.1",
+    "pg": "^7.4.0",
+    "pg-hstore": "^2.3.2",
+    "pino-debug": "^1.0.5",
+    "sequelize": "^4.22.6"
   }
 }
