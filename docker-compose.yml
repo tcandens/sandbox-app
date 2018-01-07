@@ -35,7 +35,8 @@ services:
     depends_on:
       - api
   proxy:
-    image: jwilder/nginx-proxy
+    build:
+      context: ./proxy
     ports:
       - "80:80"
     volumes:

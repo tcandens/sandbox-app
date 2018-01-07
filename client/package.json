@@ -29,7 +29,11 @@
     "webpack-koa2-middleware": "^2.1.0"
   },
   "dependencies": {
+    "es6-promise": "^4.2.2",
+    "isomorphic-fetch": "^2.2.1",
     "koa": "^2.3.0",
+    "nanographql": "^1.1.0",
+    "qs": "^6.5.1",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-hot-loader": "^3.0.0-beta.7",

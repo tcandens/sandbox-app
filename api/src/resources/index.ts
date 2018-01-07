@@ -23,7 +23,7 @@ const root = mergeResolvers([
 
 const schema = buildSchema(typeDefs)
 
-rootRouter.all('/graphql', graphqlHTTP({
+rootRouter.all('/', graphqlHTTP({
   schema,
   rootValue: root,
   graphiql: true,
