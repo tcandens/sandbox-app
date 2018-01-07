@@ -18,7 +18,7 @@ render(Entry)
 
 if (module.hot) {
   module.hot.accept('./entry.tsx', function() {
-    console.log('Reloading!')
-    render(Entry)
+    const FreshEntry = require('./entry.tsx').default
+    render(FreshEntry)
   })
 }

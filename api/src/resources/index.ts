@@ -4,13 +4,14 @@ import * as graphqlHTTP from 'koa-graphql'
 import { buildSchema } from 'graphql'
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 
+import * as exercise from './exercise'
+import { router as authRouter } from './authentication'
 import { router as maintenanceRouter } from './maintenance'
 
 const rootRouter = new Router()
 
+rootRouter.use(authRouter.routes())
 rootRouter.use(maintenanceRouter.routes())
-
-import * as exercise from './exercise'
 
 const typeDefs = mergeTypes([
   exercise.types,
@@ -28,6 +29,6 @@ rootRouter.all('/graphql', graphqlHTTP({
   graphiql: true,
 }))
 
-export function routesDecorator (app: Koa) {
+export function resourcesDecorator (app: Koa) {
   app.use(rootRouter.routes()).use(rootRouter.allowedMethods())
 }

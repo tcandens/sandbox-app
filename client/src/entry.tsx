@@ -5,7 +5,7 @@ export default class Entry extends React.Component {
   render() {
     return (
       <section>
-        <Hello name="Buddy" />
+        <Hello name="Holly" />
       </section>
     )
   }
