@@ -1,38 +1,22 @@
 import * as React from 'react'
-import Hello from './Components/Hello'
-import gql from 'nanographql'
-import qs from 'qs'
+import { inject, observer } from 'mobx-react'
+import Hello from './components/Hello'
+import {IGeneralStore} from './stores'
 
-const API_ROOT = 'http://api.trainer.com'
+interface IProps {
+  store: IGeneralStore
+}
 
-const query = gql`
-  query {
-    getAllExercises {
-      id,
-      description
-    }
-  }
-`
-const endpoint = `${API_ROOT}/?${qs.stringify(query())}`
-
-export default class Entry extends React.Component {
-  state = {
-    exercises: []
-  }
+@inject('store')
+@observer  
+export default class Entry extends React.Component<IProps> {
   componentDidMount() {
-    fetch(endpoint)
-      .then(response => response.json())
-      .then(({data}) => {
-        this.setState({
-          exercises: data.getAllExercises
-        });
-      })
-      .catch(err => console.warn(err))
+    this.props.store.getExercises()
   }
   render() {
     return (
       <section>
-        {this.state.exercises.map(({description, id}) => (
+        {this.props.store.exercises.map(({description, id}) => (
           <div key={id}>
             <span>{description}</span>
           </div>
