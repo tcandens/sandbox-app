@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/promise.prototype.finally": "^2.0.2",
     "@types/react": "^16.0.10",
     "@types/react-dom": "^16.0.1",
     "@types/webpack-env": "^1.13.1",

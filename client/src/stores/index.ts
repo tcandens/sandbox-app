@@ -1,9 +1,14 @@
 import { observable, action } from 'mobx'
 import agent from '../agent'
 
+export interface IExercise {
+  id: number
+  description: string
+}
+
 export interface IGeneralStore {
   isLoading: boolean
-  exercises: {}[]
+  exercises: IExercise[]
   getExercises(): void
 }
 
@@ -12,7 +17,7 @@ class GeneralStore<IGeneralStore> {
   @observable exercises
   @action getExercises() {
     this.isLoading = true
-    agent(`
+    return agent(`
       query {
         getAllExercises {
           id,

@@ -16,7 +16,7 @@ export default class Entry extends React.Component<IProps> {
   render() {
     return (
       <section>
-        {this.props.store.exercises.map(({description, id}) => (
+        {this.props.store.exercises.map(({ description, id }) => (
           <div key={id}>
             <span>{description}</span>
           </div>
