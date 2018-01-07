@@ -1,4 +1,4 @@
-import { observable, action } from 'mobx'
+import { observable, computed, action } from 'mobx'
 import agent from '../agent'
 
 export interface IExercise {
@@ -9,12 +9,17 @@ export interface IExercise {
 export interface IGeneralStore {
   isLoading: boolean
   exercises: IExercise[]
+  exercisesRegistry: any
   getExercises(): void
+  addExercise(): void
 }
 
 class GeneralStore<IGeneralStore> {
   @observable isLoading = false
-  @observable exercises
+  @observable exercisesRegistry = observable.map()
+  @computed get exercises() {
+    return this.exercisesRegistry.values()
+  }
   @action getExercises() {
     this.isLoading = true
     return agent(`
@@ -26,10 +31,24 @@ class GeneralStore<IGeneralStore> {
       }
     `, {})
       .then(({ data }) => data.getAllExercises)
-      .then(action(exercises => {
-        this.exercises = exercises
+      .then(action((exercises: IExercise[]) => {
+        this.exercisesRegistry.clear()
+        exercises.forEach((exercise: IExercise) => {
+          this.exercisesRegistry.set(`${exercise.id}`, exercise)
+        })
       }))
       .finally(action(() => this.isLoading = false))
+  }
+  @action.bound
+  addExercise() {
+    const id = this.exercisesRegistry.size + 1
+    return this.exercisesRegistry.set(
+      `${id}`,
+      {
+        id,
+        description: 'Hello!'
+      }
+    )
   }
 }
 

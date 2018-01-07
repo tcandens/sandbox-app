@@ -14,9 +14,16 @@ export default class Entry extends React.Component<IProps> {
     this.props.store.getExercises()
   }
   render() {
+    const {
+      isLoading,
+      exercises,
+      addExercise,
+    } = this.props.store
     return (
       <section>
-        {this.props.store.exercises.map(({ description, id }) => (
+        {isLoading && <span>Hello</span>}
+        <button onClick={() => addExercise()}>Add</button>
+        {!isLoading && exercises.map(({ description, id }) => (
           <div key={id}>
             <span>{description}</span>
           </div>
