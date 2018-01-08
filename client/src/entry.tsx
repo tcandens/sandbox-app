@@ -16,6 +16,12 @@ const StyledContainer = styled('section') `
   padding: 0 1em;
   margin-top: 1em;
 `
+const StyledGrid = styled('div') `
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-column-gap: 1em;
+`
 const StyledInput = styled('input')`
   ${styledFormItem};
 `
@@ -94,17 +100,19 @@ export default class Entry extends React.Component<IProps, IState> {
           />
           <StyledButton type="submit">Add</StyledButton>
         </form>
-        {isLoading ?
-          <span>...</span> :
-          exercises.map((item) => (
-            <ListItem
-              key={item.id}
-              delete={() => this.props.exerciseStore.destroyExercise(item.id)}
-              {...item}
-            />
+        <StyledGrid>
+          {isLoading ?
+            <span>...</span> :
+            exercises.map((item) => (
+              <ListItem
+                key={item.id}
+                delete={() => this.props.exerciseStore.destroyExercise(item.id)}
+                {...item}
+              />
 
-          ))
-        }
+            ))
+          }
+        </StyledGrid>
       </StyledContainer>
     )
   }

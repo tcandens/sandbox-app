@@ -54,14 +54,14 @@ class GeneralStore implements IExerciseStore {
     `, { exercise }, {
       method: 'POST'  
     })
-    result.then(({data, errors}) => {
+    result.then(action(({data, errors}) => {
       if (errors) return
       const { id } = data.addExercise
       this.exercisesRegistry.set(
         `${id}`,
         Object.assign({}, exercise, { id })
       )
-    })
+    }))
   }
 
   @action
