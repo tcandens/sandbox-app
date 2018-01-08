@@ -8,13 +8,13 @@ export interface IExercise {
 
 export interface IGeneralStore {
   isLoading: boolean
-  exercises: IExercise[]
+  exercises
   exercisesRegistry: any
   getExercises(): void
-  addExercise(): void
+  addExercise(IExercise): void
 }
 
-class GeneralStore<IGeneralStore> {
+class GeneralStore implements IGeneralStore {
   @observable isLoading = false
   @observable exercisesRegistry = observable.map()
   @computed get exercises() {
@@ -39,15 +39,12 @@ class GeneralStore<IGeneralStore> {
       }))
       .finally(action(() => this.isLoading = false))
   }
-  @action.bound
-  addExercise() {
+  @action
+  addExercise(exercise) {
     const id = this.exercisesRegistry.size + 1
-    return this.exercisesRegistry.set(
-      `${id}`,
-      {
-        id,
-        description: 'Hello!'
-      }
+    this.exercisesRegistry.set(
+      `${exercise.id}`,
+      exercise
     )
   }
 }
