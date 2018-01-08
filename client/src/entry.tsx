@@ -1,21 +1,49 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import Hello from './components/Hello'
-import {IGeneralStore} from './stores'
+import {IExerciseStore} from './stores/exerciseStore'
+import styled, {css} from 'react-emotion'
+import ListItem from './components/ListItem'
 
-interface IProps {
-  store: IGeneralStore
+const styledFormItem = css`
+  font-size: 1.8em;
+  width: 100%;
+  margin-bottom: 0.3em;
+  padding: 0.4em 0.6em;
+`
+const StyledContainer = styled('section') `
+  width: 100%;
+  padding: 0 1em;
+  margin-top: 1em;
+`
+const StyledInput = styled('input')`
+  ${styledFormItem};
+`
+const StyledButton = styled('button') `
+  ${styledFormItem};
+  border: none;
+  background-color: coral;
+`
+
+type IProps = {
+  exerciseStore: IExerciseStore
 }
-interface IState {
+type IState = {
   name: string
   description: string
 }
 
-@inject('store')
+@inject('exerciseStore')
 @observer  
 export default class Entry extends React.Component<IProps, IState> {
+  private nameInput: HTMLInputElement
+  state = {
+    name: '',
+    description: '',
+  }
+
   componentDidMount() {
-    this.props.store.getExercises()
+    this.props.exerciseStore.getExercises()
   }
   handleInputChange = (event) => {
     const target = event.target
@@ -31,46 +59,53 @@ export default class Entry extends React.Component<IProps, IState> {
       name,
       description
     } = this.state
-    this.props.store.addExercise({
+    this.props.exerciseStore.addExercise({
       name,
       description,
     })
+    this.setState({name: '', description: ''})
+    this.nameInput.focus()
   }
   handleDelete = (id) => {
-    this.props.store.destroyExercise(id)
+    this.props.exerciseStore.destroyExercise(id)
   }
   render() {
     const {
       isLoading,
       exercises,
       addExercise,
-    } = this.props.store
+    } = this.props.exerciseStore
     return (
-      <section>
-        {isLoading && <span>...</span>}
-        {!isLoading && exercises.map(({ name, description, id }) => (
-          <div key={id}>
-            <button onClick={() => this.handleDelete(id)}>X</button>
-            <h4>{name}</h4>
-            <span>{id}</span>
-            <span>{description}</span>
-          </div>
-        ))}
+      <StyledContainer>
         <form onSubmit={this.handleSubmit}>
-          <input
+          <StyledInput
+            innerRef={(c) => this.nameInput = c}
             type="text"
             name="name"
+            value={this.state.name}
             onChange={this.handleInputChange}
           />  
-          <input
+          <StyledInput
             type="text"
             name="description"
             placeholder="Add description here"
+            value={this.state.description}
             onChange={this.handleInputChange}
           />
-          <button type="submit">Add</button>
+          <StyledButton type="submit">Add</StyledButton>
         </form>
-      </section>
+        {isLoading ?
+          <span>...</span> :
+          exercises.map((item) => (
+            <ListItem
+              key={item.id}
+              delete={() => this.props.exerciseStore.destroyExercise(item.id)}
+              {...item}
+            />
+
+          ))
+        }
+      </StyledContainer>
     )
   }
 }

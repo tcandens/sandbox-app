@@ -3,6 +3,10 @@
     "env"
   ],
   "plugins": [
-    "react-hot-loader/babel"
+    "react-hot-loader/babel",
+    ["emotion", {
+      "sourceMap": true,
+      "autoLabel": true
+    }]
   ]
 }

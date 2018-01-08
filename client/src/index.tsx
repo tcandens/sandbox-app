@@ -1,16 +1,26 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
-import store from './stores'
+import stores from './stores/'
 import { AppContainer as HotContainer } from 'react-hot-loader'
 import Entry from './entry'
+import { injectGlobal } from 'react-emotion'
+
+injectGlobal`
+  *, *:before, *:after {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+  }
+`
 
 const root = document.getElementById('root')
 
 const render = Component => {
   ReactDOM.render(
     <HotContainer>
-      <Provider store={store}>
+      <Provider {...stores}>
         <Component />
       </Provider>
     </HotContainer>,
