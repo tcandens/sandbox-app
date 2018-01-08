@@ -26,6 +26,7 @@ class GeneralStore implements IGeneralStore {
       query {
         getAllExercises {
           id,
+          name,
           description
         }
       }
@@ -41,11 +42,25 @@ class GeneralStore implements IGeneralStore {
   }
   @action
   addExercise(exercise) {
-    const id = this.exercisesRegistry.size + 1
-    this.exercisesRegistry.set(
-      `${exercise.id}`,
-      exercise
-    )
+    const result = agent(`
+      mutation CreateExercise($exercise: ExerciseInput) {
+        addExercise(input: $exercise) {
+          id
+        }
+      }
+    `, { exercise }, {
+      method: 'POST'  
+    })
+    result.then((response) => {
+      if (response.errors) {
+        console.dir(response.errors)
+      } else if (response.data) {
+        this.exercisesRegistry.set(
+          `${response.data.id}`,
+          exercise
+        )
+      }
+    })
   }
 }
 

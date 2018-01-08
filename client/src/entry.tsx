@@ -7,6 +7,7 @@ interface IProps {
   store: IGeneralStore
 }
 interface IState {
+  name: string
   description: string
 }
 
@@ -26,10 +27,12 @@ export default class Entry extends React.Component<IProps, IState> {
   }
   handleSubmit = (event) => {
     event.preventDefault()
-    const id = this.props.store.exercises.length + 1
-    const description = this.state.description
+    const {
+      name,
+      description
+    } = this.state
     this.props.store.addExercise({
-      id,
+      name,
       description,
     })
   }
@@ -42,12 +45,18 @@ export default class Entry extends React.Component<IProps, IState> {
     return (
       <section>
         {isLoading && <span>...</span>}
-        {!isLoading && exercises.map(({ description, id }) => (
+        {!isLoading && exercises.map(({ name, description, id }) => (
           <div key={id}>
+            <h4>{name}</h4>
             <span>{description}</span>
           </div>
         ))}
         <form onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            onChange={this.handleInputChange}
+          />  
           <input
             type="text"
             name="description"
