@@ -12,6 +12,7 @@ export interface IGeneralStore {
   exercisesRegistry: any
   getExercises(): void
   addExercise(IExercise): void
+  destroyExercise(id: number): void
 }
 
 class GeneralStore implements IGeneralStore {
@@ -40,6 +41,7 @@ class GeneralStore implements IGeneralStore {
       }))
       .finally(action(() => this.isLoading = false))
   }
+
   @action
   addExercise(exercise) {
     const result = agent(`
@@ -51,16 +53,31 @@ class GeneralStore implements IGeneralStore {
     `, { exercise }, {
       method: 'POST'  
     })
-    result.then((response) => {
-      if (response.errors) {
-        console.dir(response.errors)
-      } else if (response.data) {
-        this.exercisesRegistry.set(
-          `${response.data.id}`,
-          exercise
-        )
-      }
+    result.then(({data, errors}) => {
+      if (errors) return
+      const { id } = data.addExercise
+      this.exercisesRegistry.set(
+        `${id}`,
+        Object.assign({}, exercise, { id })
+      )
     })
+  }
+
+  @action
+  destroyExercise(id) {
+    const result = agent(`
+      mutation DestroyExercise($id: Int!) {
+        destroyExercise(id: $id) {
+          id
+        }
+      }
+    `, { id }, {
+      method: 'POST'  
+    })
+    result.then(action(({data, errors}) => {
+      if (errors) return
+      this.exercisesRegistry.delete(id)
+    }))
   }
 }
 

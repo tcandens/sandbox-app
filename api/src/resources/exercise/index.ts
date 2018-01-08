@@ -1,7 +1,7 @@
 import Exercise from './model'
 import * as createDebug from 'debug'
 
-Exercise.sync()
+Exercise.sync({ force: true })
 
 interface IExercise {
   id: number
@@ -33,25 +33,26 @@ export const types = `
 
   type Mutation {
     addExercise(input: ExerciseInput): Exercise
+    destroyExercise(id: Int!): Exercise
   }
 `
 
 export const resolvers = {
   getAllExercises: async (): Promise<[IExercise]> => {
+    debug('getAllExercises')
     const result = await Exercise
       .findAll()
-      .then((found) => {
-        console.log(found)
-        return found
-      })
+      .then((found) => found)
       .catch((err: Error) => debug('Error fetching all: %s. %O', err.message, err.stack))
     return result
   },
   addExercise: async ({ input }): Promise<IExercise> => {
+    debug('addExercise')
     const created = await Exercise
       .create(input)
-      .then((result) => {
+      .then(result => {
         const saved = result.get({ plain: true })
+        console.dir(saved)
         if (!saved.id) {
           throw Error('Returned no ID')
         } else {
@@ -60,5 +61,20 @@ export const resolvers = {
       })
       .catch((err: Error) => debug('Error adding: %s. %O', err.message, err.stack))
     return created
+  },
+  destroyExercise: async ({ id }) => {
+    const destroyed = await Exercise
+      .findOne({
+        where: {
+          id: id,
+        },
+      })
+      .then(model => {
+        if (!model) return false
+        model.destroy()
+        return model
+      })
+      .catch(err => console.log(err))
+    return destroyed
   },
 }

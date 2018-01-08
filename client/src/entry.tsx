@@ -36,6 +36,9 @@ export default class Entry extends React.Component<IProps, IState> {
       description,
     })
   }
+  handleDelete = (id) => {
+    this.props.store.destroyExercise(id)
+  }
   render() {
     const {
       isLoading,
@@ -47,7 +50,9 @@ export default class Entry extends React.Component<IProps, IState> {
         {isLoading && <span>...</span>}
         {!isLoading && exercises.map(({ name, description, id }) => (
           <div key={id}>
+            <button onClick={() => this.handleDelete(id)}>X</button>
             <h4>{name}</h4>
+            <span>{id}</span>
             <span>{description}</span>
           </div>
         ))}
