@@ -1,10 +1,13 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Provider } from 'mobx-react'
+import * as mobx from 'mobx'
 import stores from './stores/'
 import { AppContainer as HotContainer } from 'react-hot-loader'
 import Entry from './entry'
 import { injectGlobal } from 'react-emotion'
+
+mobx.useStrict(true)
 
 injectGlobal`
   *, *:before, *:after {
