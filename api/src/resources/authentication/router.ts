@@ -24,9 +24,7 @@ export const router = new Router({
       failureRedirect: '/auth/failure',
     }),
     async (ctx, next) => {
-      const user = ctx.req.user
-      console.log(chalk.green('SOMETHING!'))
-      console.dir(ctx.req)
-      ctx.redirect('/success')
+      const user = ctx.state.user
+      ctx.redirect('http://dev.trainer.com/auth/success')
     },
   )

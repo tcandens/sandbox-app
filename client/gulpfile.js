@@ -1,8 +1,9 @@
 const gulp = require('gulp')
 const path = require('path')
-
-const { startServer } = require('./server')
+const nodemon = require('gulp-nodemon')
 
 gulp.task('default', function () {
-  startServer()
+  nodemon({
+    script: './server.js'
+  })
 })

@@ -1,26 +1,25 @@
 const Koa = require('koa')
-const webpackMiddleware = require('koa-webpack')
+const logger = require('koa-pino-logger')
+const WebpackMiddleware = require('koa-webpack')
 
-function startServer() {
-  const app = new Koa()
-  app.use(webpackMiddleware({
-    dev: {
-      publicPath: '/',
-      stats: {
-        colors: true,
-      },
-    }, 
-    hot: {
+const app = new Koa()
+const webpackMiddleware = WebpackMiddleware({
+  dev: {
+    publicPath: '/',
+    stats: {
+      colors: true,
+    },
+  }, 
+})
 
-    }
-  }))
-  app.listen(8080, '0.0.0.0', error => {
-    if (error) console.warn(error)
-    console.log('Starting dev server')
-  })
-  return app
-}
+app.use(logger())
+app.use(webpackMiddleware)
 
-module.exports = {
-  startServer
-}
+app.listen(8080, '0.0.0.0', error => {
+  if (error) console.warn(error)
+  console.log('Starting dev server')
+})
+
+module.exports = app
+
+

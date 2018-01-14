@@ -4,7 +4,8 @@ import { Provider } from 'mobx-react'
 import * as mobx from 'mobx'
 import stores from './stores/'
 import { AppContainer as HotContainer } from 'react-hot-loader'
-import Entry from './entry'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import App from './App'
 import { injectGlobal } from 'react-emotion'
 
 mobx.useStrict(true)
@@ -31,11 +32,11 @@ const render = Component => {
   )
 }
 
-render(Entry)
+render(App)
 
 if (module.hot) {
-  module.hot.accept('./entry.tsx', function() {
-    const FreshEntry = require('./entry.tsx').default
-    render(FreshEntry)
+  module.hot.accept('./App.tsx', function() {
+    const FreshApp = require('./App.tsx').default
+    render(FreshApp)
   })
 }

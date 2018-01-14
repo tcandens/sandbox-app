@@ -15,7 +15,7 @@ passport.use(
     {
       clientID: GOOGLE_CLIENT_ID,
       clientSecret: GOOGLE_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/auth/google/callback',
+      callbackURL: 'http://api.trainer.com/auth/google/callback',
     },
     (accessToken, refreshToken, profile, next) => {
       debug('Profile fed to Google OAuth strategy. %O', profile)

@@ -1,7 +1,7 @@
 import Exercise from './model'
 import * as createDebug from 'debug'
 
-Exercise.sync({ force: true })
+Exercise.sync({ force: false })
 
 interface IExercise {
   id: number

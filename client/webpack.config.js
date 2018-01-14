@@ -12,7 +12,7 @@ module.exports = {
   },
   output: {
     filename: '[hash:8].[name].js',
-    path: path.resolve(__dirname, 'build')
+    path: path.resolve(__dirname, 'build'),
   },
   devtool: 'inline-source-map',
   module: {
