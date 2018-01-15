@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { observer } from 'mobx-react'
+import { observer, inject } from 'mobx-react'
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,8 +12,16 @@ const NotFound = () => (
   <h1>Not Found!</h1>
 )
 
+type IProps = {
+  userStore
+}
+
 @observer
-export default class App extends React.Component {
+@inject('userStore')
+export default class App extends React.Component <IProps> {
+  componentWillMount() {
+    this.props.userStore.getSelf()
+  }
   render() {
     return (
       <Router>

@@ -5,7 +5,6 @@ export default agent
 
 const API_ROOT = 'http://api.trainer.com'
 
-
 function agent(query, data = {}, options = {}) {
   const endpoint = `${API_ROOT}/?${qs.stringify(gql(query)(data))}`
   const defaultOptions: any = {

@@ -52,7 +52,6 @@ export const resolvers = {
       .create(input)
       .then(result => {
         const saved = result.get({ plain: true })
-        console.dir(saved)
         if (!saved.id) {
           throw Error('Returned no ID')
         } else {

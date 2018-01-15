@@ -34,13 +34,14 @@ const StyledButton = styled('button') `
 
 type IProps = {
   exerciseStore: IExerciseStore
+  userStore
 }
 type IState = {
   name: string
   description: string
 }
 
-@inject('exerciseStore')
+@inject('exerciseStore', 'userStore')
 @observer  
 export default class Entry extends React.Component<IProps, IState> {
   private nameInput: HTMLInputElement
@@ -83,9 +84,14 @@ export default class Entry extends React.Component<IProps, IState> {
       exercises,
       addExercise,
     } = this.props.exerciseStore
+    const {
+      isAuthenticated,
+      user,
+    } = this.props.userStore
     return (
       <StyledContainer>
-        <Link to="/auth"><StyledButton>Sign in</StyledButton></Link>
+        {!isAuthenticated && <Link to="/auth"><StyledButton>Sign in</StyledButton></Link>}
+        {isAuthenticated && <span>Hello, {user.firstName}</span>}
         <form onSubmit={this.handleSubmit}>
           <StyledInput
             innerRef={(c) => this.nameInput = c}

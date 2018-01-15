@@ -5,6 +5,7 @@ import { buildSchema } from 'graphql'
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 
 import * as exercise from './exercise'
+import * as user from './users'
 import { router as authRouter } from './authentication'
 import { router as maintenanceRouter } from './maintenance'
 
@@ -15,10 +16,12 @@ rootRouter.use(maintenanceRouter.routes())
 
 const typeDefs = mergeTypes([
   exercise.types,
+  user.types,
 ])
 
 const root = mergeResolvers([
   exercise.resolvers,
+  user.resolvers,
 ])
 
 const schema = buildSchema(typeDefs)
