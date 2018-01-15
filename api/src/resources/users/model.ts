@@ -24,6 +24,6 @@ const User = db.define('user', {
   lastName: Sequelize.STRING,
 })
 
-User.sync({ force: true })
+User.sync({ force: false })
 
 export default User

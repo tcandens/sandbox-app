@@ -5,7 +5,8 @@ import {
   Switch,
   Route
 } from 'react-router-dom'
-import Entry from './Entry'
+import Entry from './pages/Entry'
+import Auth from './pages/Auth'
 
 const NotFound = () => (
   <h1>Not Found!</h1>
@@ -18,6 +19,7 @@ export default class App extends React.Component {
       <Router>
         <Switch>
           <Route exact path="/" component={Entry} />
+          <Route path="/auth" component={Auth} />
           <Route component={NotFound} />
         </Switch>
       </Router>

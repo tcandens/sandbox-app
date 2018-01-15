@@ -73,7 +73,7 @@ class ExerciseStore implements IExerciseStore {
         }
       }
     `, { id }, {
-      method: 'POST'  
+      method: 'POST'
     })
     result.then(action(({data, errors}) => {
       if (errors) return

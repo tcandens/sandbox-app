@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { inject, observer } from 'mobx-react'
-import Hello from './components/Hello'
-import {IExerciseStore} from './stores/exerciseStore'
+import Hello from '../components/Hello'
+import {IExerciseStore} from '../stores/exerciseStore'
 import styled, {css} from 'react-emotion'
-import ListItem from './components/ListItem'
+import ListItem from '../components/ListItem'
+import { Link } from 'react-router-dom'
 
 const styledFormItem = css`
   font-size: 1.8em;
@@ -84,6 +85,7 @@ export default class Entry extends React.Component<IProps, IState> {
     } = this.props.exerciseStore
     return (
       <StyledContainer>
+        <Link to="/auth"><StyledButton>Sign in</StyledButton></Link>
         <form onSubmit={this.handleSubmit}>
           <StyledInput
             innerRef={(c) => this.nameInput = c}
