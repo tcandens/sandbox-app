@@ -6,7 +6,6 @@ module.exports = {
   entry: {
     app: [
       'react-hot-loader/patch',
-      // 'webpack-hot-middleware/client',
       './src/index.tsx',
     ]
   },

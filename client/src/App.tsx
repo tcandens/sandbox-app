@@ -14,7 +14,7 @@ export default function App () {
   return (
     <Router>
       <Switch>
-        <Route path="/" component={Entry} />
+        <Route exact path="/" component={Entry} />
         <Route component={NotFound} />
       </Switch>
     </Router>

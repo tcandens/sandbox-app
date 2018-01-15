@@ -4,7 +4,6 @@ import { Provider } from 'mobx-react'
 import * as mobx from 'mobx'
 import stores from './stores/'
 import { AppContainer as HotContainer } from 'react-hot-loader'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
 import App from './App'
 import { injectGlobal } from 'react-emotion'
 
