@@ -6,15 +6,28 @@ module.exports = {
   entry: {
     app: [
       'react-hot-loader/patch',
-      'webpack-hot-middleware/client',
+      // 'webpack-hot-middleware/client',
       './src/index.tsx',
     ]
   },
   output: {
     filename: '[hash:8].[name].js',
     path: path.resolve(__dirname, 'build'),
+    publicPath: '/',
   },
   devtool: 'inline-source-map',
+  devServer: {
+    host: '0.0.0.0',
+    port: 8080,
+    allowedHosts: [
+      '.trainer.com',
+    ],
+    hot: true,
+    historyApiFallback: true,
+    stats: {
+      colors: true,
+    }
+  },
   module: {
     rules: [
       {
