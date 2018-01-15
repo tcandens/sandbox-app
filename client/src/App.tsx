@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { observer } from 'mobx-react'
 import {
   BrowserRouter as Router,
   Switch,
@@ -10,13 +11,16 @@ const NotFound = () => (
   <h1>Not Found!</h1>
 )
 
-export default function App () {
-  return (
-    <Router>
-      <Switch>
-        <Route exact path="/" component={Entry} />
-        <Route component={NotFound} />
-      </Switch>
-    </Router>
-  )
-}
+@observer
+export default class App extends React.Component {
+  render() {
+    return (
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Entry} />
+          <Route component={NotFound} />
+        </Switch>
+      </Router>
+    )
+  }
+} 

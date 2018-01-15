@@ -15,7 +15,7 @@ export interface IExerciseStore {
   destroyExercise(id: number): void
 }
 
-class GeneralStore implements IExerciseStore {
+class ExerciseStore implements IExerciseStore {
   @observable isLoading = false
   @observable exercisesRegistry = observable.map()
   @computed get exercises() {
@@ -82,4 +82,4 @@ class GeneralStore implements IExerciseStore {
   }
 }
 
-export default new GeneralStore()
+export default new ExerciseStore()

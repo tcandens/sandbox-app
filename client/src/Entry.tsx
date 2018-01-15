@@ -28,7 +28,7 @@ const StyledInput = styled('input')`
 const StyledButton = styled('button') `
   ${styledFormItem};
   border: none;
-  background-color: coral;
+  background-color: pink;
 `
 
 type IProps = {
@@ -51,6 +51,7 @@ export default class Entry extends React.Component<IProps, IState> {
   componentDidMount() {
     this.props.exerciseStore.getExercises()
   }
+
   handleInputChange = (event) => {
     const target = event.target
     const value = target.value

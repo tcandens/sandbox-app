@@ -5,7 +5,8 @@ const StyledContainer = styled('div') `
   position: relative;
   width: 100%;
   padding: 1em;
-  background: lightgrey;
+  background: papayawhip;
+  border-bottom: 3px solid purple;
   font-family: sans-serif;
   margin-bottom: 0.7em;
 `
