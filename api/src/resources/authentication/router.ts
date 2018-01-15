@@ -32,7 +32,7 @@ export const router = new Router({
         'email',
       ])
       const token = jwt.sign(user, process.env.TOKEN_SECRET || null, {
-        expiresIn: (60 * 2),
+        expiresIn: '3h',
       })
       ctx.cookies.set('Authorization', token, { domain: '.trainer.com', secure: false, overwrite: true })
       ctx.redirect('http://dev.trainer.com/auth/success')

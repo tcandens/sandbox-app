@@ -19,9 +19,10 @@ class UserStore implements IUserStore {
 
   @action
   getUser(id) {
+    const operation = 'getUser'
     const result = agent(`
       query GetUser($id: Int!) {
-        getUser(id: $id) {
+        ${operation}(id: $id) {
           id
           firstName
           lastName
@@ -31,15 +32,16 @@ class UserStore implements IUserStore {
     `, { id })
     result.then(action(({ data, errors }) => {
       if (errors) return
-      this.user = data.getUser
+      this.user = data[operation]
     }))
   }
 
   @action
   getSelf() {
+    const operation = 'getSelf'
     const result = agent(`
       query GetSelf {
-        getSelf {
+        ${operation} {
           id
           firstName
           lastName
@@ -49,9 +51,9 @@ class UserStore implements IUserStore {
     `, {})
     result.then(action(({ data, errors }) => {
       if (errors) return
-      if (data.getSelf) {
+      if (data[operation]) {
         this.isAuthenticated = true
-        this.user = data.getSelf
+        this.user = data[operation]
       }
     }))
       .catch(err => {

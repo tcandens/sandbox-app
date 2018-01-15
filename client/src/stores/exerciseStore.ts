@@ -24,16 +24,17 @@ class ExerciseStore implements IExerciseStore {
 
   @action getExercises() {
     this.isLoading = true
+    const operation = 'getExercises'
     return agent(`
       query {
-        getAllExercises {
+        ${operation} {
           id,
           name,
           description
         }
       }
     `, {})
-      .then(({ data }) => data.getAllExercises)
+      .then(({ data }) => data[operation])
       .then(action((exercises: IExercise[]) => {
         this.exercisesRegistry.clear()
         exercises.forEach((exercise: IExercise) => {
@@ -45,9 +46,10 @@ class ExerciseStore implements IExerciseStore {
 
   @action
   addExercise(exercise) {
+    const operation = 'addExercise'
     const result = agent(`
       mutation CreateExercise($exercise: ExerciseInput) {
-        addExercise(input: $exercise) {
+        ${operation}(input: $exercise) {
           id
         }
       }
@@ -56,7 +58,7 @@ class ExerciseStore implements IExerciseStore {
     })
     result.then(action(({data, errors}) => {
       if (errors) return
-      const { id } = data.addExercise
+      const { id } = data[operation]
       this.exercisesRegistry.set(
         `${id}`,
         Object.assign({}, exercise, { id })
@@ -66,9 +68,10 @@ class ExerciseStore implements IExerciseStore {
 
   @action
   destroyExercise(id) {
+    const operation = 'destroyExercise'
     const result = agent(`
       mutation DestroyExercise($id: Int!) {
-        destroyExercise(id: $id) {
+        ${operation}(id: $id) {
           id
         }
       }

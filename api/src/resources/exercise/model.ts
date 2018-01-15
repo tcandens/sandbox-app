@@ -1,7 +1,8 @@
 import * as Sequelize from 'sequelize'
 import db from '../../connections/db'
+import User from '../users/model'
 
-const Exersize = db.define('exercise', {
+const Exercise = db.define('exercise', {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
@@ -9,4 +10,6 @@ const Exersize = db.define('exercise', {
   description: Sequelize.TEXT,
 })
 
-export default Exersize
+Exercise.belongsTo(User)
+
+export default Exercise

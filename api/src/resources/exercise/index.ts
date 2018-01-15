@@ -25,9 +25,11 @@ export const types = `
     description: String
     createdAt: Float
     updatedAt: Float
+    userId: Int
   }
 
   type Query {
+    getExercises: [Exercise]
     getAllExercises: [Exercise]
   }
 
@@ -38,18 +40,30 @@ export const types = `
 `
 
 export const resolvers = {
+  getExercises: async (_, ctx): Promise<[IExercise]> => {
+    debug('getExercises')
+    const result = await Exercise
+      .findAll({
+        where: {
+          userId: ctx.state.user.id,
+        },
+      })
+      .then((found) => found)
+      .catch((err: Error) => debug('Error fetching: %s. %O', err.message, err.stack))
+    return result
+  },
   getAllExercises: async (): Promise<[IExercise]> => {
     debug('getAllExercises')
     const result = await Exercise
       .findAll()
-      .then((found) => found)
+      .then(found => found)
       .catch((err: Error) => debug('Error fetching all: %s. %O', err.message, err.stack))
     return result
   },
-  addExercise: async ({ input }): Promise<IExercise> => {
+  addExercise: async ({ input }, ctx): Promise<IExercise> => {
     debug('addExercise')
     const created = await Exercise
-      .create(input)
+      .create(Object.assign(input, { userId: ctx.state.user.id }))
       .then(result => {
         const saved = result.get({ plain: true })
         if (!saved.id) {
