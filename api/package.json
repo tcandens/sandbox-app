@@ -17,7 +17,7 @@
     "@types/graphql": "^0.11.6",
     "@types/koa": "^2.0.40",
     "@types/node": "^8.0.51",
-    "@types/sequelize": "^4.0.79",
+    "@types/sequelize": "^4.27.4",
     "gulp": "^3.9.1",
     "gulp-nodemon": "^2.2.1",
     "gulp-rename": "^1.2.2",

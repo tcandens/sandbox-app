@@ -1,4 +1,5 @@
 import Exercise from './model'
+import User from '../users/model'
 import * as createDebug from 'debug'
 
 Exercise.sync({ force: false })
@@ -9,6 +10,11 @@ interface IExercise {
   description: string
   createdAt: number
   updatedAt: number
+}
+
+type instance = {
+  get (options: any): any
+  destroy (): void,
 }
 
 const debug = createDebug('exercise')
@@ -26,11 +32,13 @@ export const types = `
     createdAt: Float
     updatedAt: Float
     userId: Int
+    creator: User
   }
 
   type Query {
-    getExercises: [Exercise]
-    getAllExercises: [Exercise]
+    exercise(id: ID!): Exercise
+    exercises: [Exercise]
+    allExercises: [Exercise]
   }
 
   type Mutation {
@@ -40,7 +48,25 @@ export const types = `
 `
 
 export const resolvers = {
-  getExercises: async (_, ctx): Promise<[IExercise]> => {
+  exercise: async ({ id }): Promise<IExercise> => {
+    debug('getExercise')
+    const model = await Exercise.findById(id)
+      .catch((err: Error) => debug('Error fetching exercise: %s. $O', err.message, err.stack))
+    const result = model.toJSON()
+    result.creator = {
+      firstName: 'Jerry',
+    }
+    return result
+  },
+  Exercise: {
+    creator: (id) => {
+      console.log('id')
+      return {
+        name: 'Harold',
+      }
+    },
+  }
+  exercises: async (_, ctx): Promise<[IExercise]> => {
     debug('getExercises')
     const result = await Exercise
       .findAll({
@@ -52,7 +78,7 @@ export const resolvers = {
       .catch((err: Error) => debug('Error fetching: %s. %O', err.message, err.stack))
     return result
   },
-  getAllExercises: async (): Promise<[IExercise]> => {
+  allExercises: async (): Promise<[IExercise]> => {
     debug('getAllExercises')
     const result = await Exercise
       .findAll()
@@ -64,7 +90,7 @@ export const resolvers = {
     debug('addExercise')
     const created = await Exercise
       .create(Object.assign(input, { userId: ctx.state.user.id }))
-      .then(result => {
+      .then((result: instance) => {
         const saved = result.get({ plain: true })
         if (!saved.id) {
           throw Error('Returned no ID')
@@ -82,7 +108,7 @@ export const resolvers = {
           id: id,
         },
       })
-      .then(model => {
+      .then((model: instance) => {
         if (!model) return false
         model.destroy()
         return model

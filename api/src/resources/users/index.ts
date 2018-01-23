@@ -9,16 +9,16 @@ export const types = `
   }
 
   type Query {
-    getUser(id: Int): User
-    getSelf: User
+    user(id: Int): User
+    self: User
   }
 `
 
 export const resolvers = {
-  getUser: async ({ id }) => {
+  user: async ({ id }, ctx, obj) => {
     return User.findById(id)
   },
-  getSelf: async (_, ctx) => {
+  self: async (_, ctx) => {
     if (!ctx.state.user) return null
     return ctx.state.user
   },

@@ -19,7 +19,7 @@ class UserStore implements IUserStore {
 
   @action
   getUser(id) {
-    const operation = 'getUser'
+    const operation = 'user'
     const result = agent(`
       query GetUser($id: Int!) {
         ${operation}(id: $id) {
@@ -38,7 +38,7 @@ class UserStore implements IUserStore {
 
   @action
   getSelf() {
-    const operation = 'getSelf'
+    const operation = 'self'
     const result = agent(`
       query GetSelf {
         ${operation} {
