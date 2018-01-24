@@ -117,3 +117,7 @@ export const resolvers = {
     return destroyed
   },
 }
+
+export {
+  Exercise as model,
+}
