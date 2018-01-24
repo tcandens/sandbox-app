@@ -1,29 +1,42 @@
 import User from './model'
 
-export const types = `
-  type User {
-    id: ID!
-    firstName: String!
-    lastName: String!
-    email: String!
-  }
+import exerciseType, { Model as Exercise } from '../exercise'
 
-  type Query {
-    user(id: Int): User
-    self: User
-  }
-`
+import { GraphQLObjectType, GraphQLNonNull, GraphQLList } from 'graphql'
+import { GraphQLString, GraphQLID, GraphQLFloat } from 'graphql/type/scalars'
 
-export const resolvers = {
-  user: async ({ id }, ctx, obj) => {
-    return User.findById(id)
-  },
-  self: async (_, ctx) => {
-    if (!ctx.state.user) return null
-    return ctx.state.user
-  },
-}
+export default new GraphQLObjectType({
+  name: 'User',
+  fields: () => ({
+    id: {
+      type: new GraphQLNonNull(GraphQLID),
+    },
+    firstName: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'User first name',
+    },
+    lastName: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'User last name',
+    },
+    email: {
+      type: new GraphQLNonNull(GraphQLString),
+      description: 'Users email address',
+    },
+    exercises: {
+      type: new GraphQLList(exerciseType),
+      description: 'List of exercises created by this user',
+      resolve: (user, args, ctx, info) => {
+        return Exercise.findAll({
+          where: {
+            userId: user.id,
+          },
+        })
+      },
+    },
+  }),
+})
 
 export {
-  User as model,
+  User as Model,
 }
