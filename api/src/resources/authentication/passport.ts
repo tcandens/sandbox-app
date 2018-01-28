@@ -1,6 +1,6 @@
 import * as passport from 'koa-passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import { Model as User } from '../users'
+import User from '../users/model'
 import createDebug from 'debug'
 
 const debug = createDebug('passport')

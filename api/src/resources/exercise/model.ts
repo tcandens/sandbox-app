@@ -12,4 +12,6 @@ const Exercise = db.define('exercise', {
 
 Exercise.belongsTo(User)
 
+Exercise.sync({ force: false })
+
 export default Exercise
