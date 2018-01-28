@@ -1,11 +1,22 @@
 import Exercise from './model'
-import userType, { Model as User } from '../users'
+import { Op } from 'sequelize'
+import userType, { Model as User, userLoader } from '../users'
+import * as Dataloader from 'dataloader'
 import * as createDebug from 'debug'
 
 import { GraphQLObjectType, GraphQLNonNull } from 'graphql'
 import { GraphQLString, GraphQLID, GraphQLFloat } from 'graphql/type/scalars'
 
 Exercise.sync({ force: false })
+
+const exerciseLoader = new Dataloader(keys => {
+  console.log(keys)
+  return User.findAll({
+    where: {
+      [Op.in]: keys,
+    },
+  })
+})
 
 export default new GraphQLObjectType({
   name: 'Exercise',
@@ -30,14 +41,12 @@ export default new GraphQLObjectType({
     },
     user: {
       type: userType,
-      resolve: (exercise, args, ctx) => {
-        console.dir(exercise)
-        return User.findById(exercise.userId)
-      },
+      resolve: (exercise, args, ctx) => userLoader.load(exercise.userId),
     },
   }),
 })
 
 export {
   Exercise as Model,
+  exerciseLoader,
 }

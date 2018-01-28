@@ -40,7 +40,7 @@ class UserStore implements IUserStore {
   getSelf() {
     const operation = 'self'
     const result = agent(`
-      query GetSelf {
+      query {
         ${operation} {
           id
           firstName

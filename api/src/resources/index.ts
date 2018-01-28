@@ -10,8 +10,9 @@ import {
 } from 'graphql'
 import { mergeTypes, mergeResolvers } from 'merge-graphql-schemas'
 
-import exerciseType, { Model as Exercise } from './exercise'
-import userType, { Model as User } from './users'
+import { Op } from 'sequelize'
+import exerciseType, { Model as Exercise, exerciseLoader } from './exercise'
+import userType, { Model as User, userLoader } from './users'
 import { router as authRouter } from './authentication'
 import { router as maintenanceRouter } from './maintenance'
 import { GraphQLString, GraphQLID, GraphQLFloat } from 'graphql/type/scalars'
@@ -25,12 +26,6 @@ const schema = new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'RootQuery',
     fields: {
-      hello: {
-        type: GraphQLString,
-        resolve: () => {
-          return 'world'
-        },
-      },
       user: {
         type: userType,
         args: {
@@ -39,9 +34,7 @@ const schema = new GraphQLSchema({
             type: new GraphQLNonNull(GraphQLID),
           },
         },
-        resolve: (obj, args, ctx, info) => {
-          return User.findById(args.id)
-        },
+        resolve: (obj, args, ctx, info) => userLoader.load(args.id),
       },
       exercise: {
         type: exerciseType,
@@ -50,13 +43,18 @@ const schema = new GraphQLSchema({
             name: 'id',
             type: GraphQLID,
           },
-          name: {
-            name: 'name',
-            type: GraphQLString,
-          },
+          // name: {
+          //   name: 'name',
+          //   type: GraphQLString,
+          // },
         },
-        resolve: (obj, args, ctx, info) => {
-          return Exercise.findById(args.id)
+        resolve: (obj, args, ctx, info) => exerciseLoader.load(args.id),
+      },
+      self: {
+        type: userType,
+        resolve: (obj, _, ctx, info) => {
+          console.dir(ctx.state.user)
+          return User.findById(ctx.state.user.id)
         },
       },
     },

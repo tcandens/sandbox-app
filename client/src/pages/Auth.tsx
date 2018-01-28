@@ -1,13 +1,31 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
+import { inject, observer } from 'mobx-react'
+import { Link, Redirect } from 'react-router-dom'
+import { Button } from '../components/FormItems'
+import { IUserStore } from '../stores/userStore'
 
-export default class Auth extends React.Component {
+type IProps = {
+  userStore: IUserStore
+  location
+}
+
+@inject('userStore')
+@observer
+export default class Auth extends React.Component<IProps> {
   render() {
-    return (
-      <section>
-        <a href="http://api.trainer.com/auth/google">Google</a>
-        <Link to="/">Back</Link>
-      </section>
-    )
+    if (this.props.userStore.isAuthenticated) {
+      return (
+        <Redirect to="/" />
+      )
+    } else {
+      return (
+        <section>
+          <a href="http://api.trainer.com/auth/google">
+            <Button>Google</Button>
+          </a>
+          <Link to="/"><Button>Back</Button></Link>
+        </section>
+      )
+    }
   }
 }
