@@ -1,5 +1,6 @@
 import { observable, computed, action } from 'mobx'
 import agent from '../agent'
+import get from 'lodash/get'
 
 export interface IExercise {
   id: number
@@ -24,17 +25,19 @@ class ExerciseStore implements IExerciseStore {
 
   @action getExercises() {
     this.isLoading = true
-    const operation = 'getExercises'
     return agent(`
-      query {
-        ${operation} {
-          id,
-          name,
-          description
+      query QueryExercises {
+        self {
+          exercises {
+            id
+            name
+            description
+            updatedAt
+          }
         }
       }
     `, {})
-      .then(({ data }) => data[operation])
+      .then(({ data }) => get(data, 'self.exercises'))
       .then(action((exercises: IExercise[]) => {
         this.exercisesRegistry.clear()
         exercises.forEach((exercise: IExercise) => {
@@ -46,11 +49,12 @@ class ExerciseStore implements IExerciseStore {
 
   @action
   addExercise(exercise) {
-    const operation = 'addExercise'
     const result = agent(`
-      mutation CreateExercise($exercise: ExerciseInput) {
-        ${operation}(input: $exercise) {
+      mutation AddExercise($exercise: ExerciseInput) {
+        addExercise (input: $exercise) {
           id
+          createdAt,
+          updatedAt
         }
       }
     `, { exercise }, {
@@ -58,7 +62,7 @@ class ExerciseStore implements IExerciseStore {
     })
     result.then(action(({data, errors}) => {
       if (errors) return
-      const { id } = data[operation]
+      const { id } = get(data, 'addExercise')
       this.exercisesRegistry.set(
         `${id}`,
         Object.assign({}, exercise, { id })

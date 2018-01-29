@@ -1,6 +1,6 @@
 version: '3.1'
 services:
-  db:
+  postgres:
     image: postgres:alpine
     restart: always
     environment:
@@ -8,28 +8,32 @@ services:
       - POSTGRES_PASSWORD=tr@1n3r
     ports:
       - 5432:5432
+  rethinkdb:
+    image: rethinkdb:latest
+    ports:
+      - 8081:8080
   adminer:
     image: adminer
     restart: always
     ports:
-      - 8081:8080
+      - 8082:8080
   api:
     build:
       context: ./api
-    # ports:
-    #   - "3000:3000"
     entrypoint: ./entry.sh
     volumes:
       - ./api:/var/www/api
     links:
-      - db:db
+      - postgres:db
+      - rethinkdb:rethinkdb
     env_file:
       - ./secrets.env
     environment:
       - PORT=3000
       - VIRTUAL_HOST=api.trainer.com
     depends_on:
-      - db
+      - postgres
+      - rethinkdb
   client:
     build:
       context: ./client

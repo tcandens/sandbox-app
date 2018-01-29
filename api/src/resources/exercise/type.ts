@@ -11,4 +11,11 @@ const Exercise = `
   }
 `
 
-export default [Exercise, User]
+const ExerciseInput = `
+  input ExerciseInput {
+    name: String!
+    description: String
+  }
+`
+
+export default [Exercise, ExerciseInput, User]

@@ -46,6 +46,7 @@
     "pg": "^7.4.0",
     "pg-hstore": "^2.3.2",
     "pino-debug": "^1.0.5",
+    "rethinkdb": "^2.3.3",
     "sequelize": "^4.22.6"
   }
 }

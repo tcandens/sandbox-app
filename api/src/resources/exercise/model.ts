@@ -1,17 +1,15 @@
-import * as Sequelize from 'sequelize'
-import db from '../../connections/db'
-import User from '../users/model'
+import * as r from 'rethinkdb'
 
-const Exercise = db.define('exercise', {
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  description: Sequelize.TEXT,
-})
+class Exercise {
+  private conn
+  constructor () {
+    this.conn.table('exercises')
+  }
+  getAll () {
+    return this.conn.insert({
+      name: 'Fucker',
+    })
+  }
+}
 
-Exercise.belongsTo(User)
-
-Exercise.sync({ force: false })
-
-export default Exercise
+export default new Exercise()

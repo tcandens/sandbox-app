@@ -9,8 +9,8 @@ type IProps = {
   location
 }
 
-@inject('userStore')
 @observer
+@inject('userStore')
 export default class Auth extends React.Component<IProps> {
   render() {
     if (this.props.userStore.isAuthenticated) {

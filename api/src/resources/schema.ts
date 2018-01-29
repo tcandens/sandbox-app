@@ -13,9 +13,17 @@ const Query = `
   }
 `
 
+const Mutations = `
+  type Mutations {
+    addExercise(input: ExerciseInput): Exercise
+    deleteExercise(id: Int!): Exercise
+  }
+`
+
 const SchemaDefinition = `
   schema {
     query: Query
+    # mutation: Mutations
   }
 `
 
@@ -28,6 +36,7 @@ export default makeExecutableSchema({
   typeDefs: [
     SchemaDefinition,
     Query,
+    Mutations,
     ...Exercise,
   ],
   resolvers,
