@@ -16,11 +16,7 @@ export default {
   },
   User: {
     exercises (user) {
-      return Exercise.findAll({
-        where: {
-          userId: user.id,
-        },
-      })
+      return Exercise.fromUser(user.id)
     },
   },
 }

@@ -11,6 +11,5 @@ const details = {
 export async function connect () {
   if (connection) return connection
   connection = await r.connect(details)
-  console.dir(connection)
   return connection
 }
