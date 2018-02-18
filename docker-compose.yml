@@ -20,9 +20,9 @@ services:
   api:
     build:
       context: ./api
-    ports:
-      - "9229:9229"
     entrypoint: ./entry.sh
+    ports:
+      - 9229:9229
     volumes:
       - ./api:/var/www/api
     links:
@@ -32,6 +32,7 @@ services:
     environment:
       - PORT=3000
       - VIRTUAL_HOST=api.trainer.com
+      - VIRTUAL_PORT=3000
     depends_on:
       - db
   client:

@@ -7,9 +7,8 @@ COPY ./entry.sh entry.sh
 COPY ./src src/
 COPY ./build build/
 
-# Main server process port
-EXPOSE 3000
-# Node debugger port
+# Both the main server port and the debug port
 EXPOSE 9229
+EXPOSE 3000
 
 CMD ["./entry.sh"]
