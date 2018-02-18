@@ -16,7 +16,7 @@ export const router = new Router({
     passport.authenticate('google', {
       session: false,
       scope: ['email', 'profile'],
-    }),
+    })
   )
   .get(
     '/google/callback',
@@ -26,7 +26,7 @@ export const router = new Router({
     }),
     async (ctx, next) => {
       const user = pick(ctx.state.user, [
-        'id',
+        '_id',
         'firstName',
         'lastName',
         'email',
@@ -34,7 +34,11 @@ export const router = new Router({
       const token = jwt.sign(user, process.env.TOKEN_SECRET || null, {
         expiresIn: '3h',
       })
-      ctx.cookies.set('Authorization', token, { domain: '.trainer.com', secure: false, overwrite: true })
+      ctx.cookies.set('Authorization', token, {
+        domain: '.trainer.com',
+        secure: false,
+        overwrite: true,
+      })
       ctx.redirect('http://dev.trainer.com/auth/success')
-    },
+    }
   )

@@ -1,14 +1,11 @@
 import * as passport from 'koa-passport'
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20'
-import users from '../users/model'
+import userConnection from '../users/model'
 import createDebug from 'debug'
 
 const debug = createDebug('passport')
 
-const {
-  GOOGLE_CLIENT_ID,
-  GOOGLE_CLIENT_SECRET,
-} = process.env
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET } = process.env
 
 passport.use(
   new GoogleStrategy(
@@ -19,16 +16,16 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, next) => {
       debug('Profile fed to Google OAuth strategy. %O', profile)
-      const collection = await users
+      const users = await userConnection
       let user
       try {
-        user = await collection.findOne({
+        user = await users.findOne({
           authProvider: 'google',
           authId: profile.id,
         })
 
         if (!user) {
-          user = await collection.insertOne({
+          user = await users.insertOne({
             authProvider: 'google',
             authId: profile.id,
             firstName: profile.name.givenName,
@@ -37,13 +34,16 @@ passport.use(
           })
         }
 
-        next(null, user)
+        next(null, {
+          ...user,
+          _id: user._id.toHexString(),
+        })
       } catch (error) {
         console.log(error.stack)
         next(error)
       }
-    },
-  ),
+    }
+  )
 )
 
 export default passport

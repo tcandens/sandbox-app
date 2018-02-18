@@ -24,6 +24,7 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-typescript": "^3.2.2",
     "tslint": "^5.8.0",
+    "tslint-config-prettier": "^1.8.0",
     "tslint-config-standard": "^7.0.0",
     "typescript": "^2.5.3"
   },

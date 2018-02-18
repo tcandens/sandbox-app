@@ -1,28 +1,33 @@
 import { connect } from '../../connections/mongo'
 
-const users = connect().then(db => db.collection('users'))
+const users = connect().then(db => {
+  db.createCollection('users', {
+    validator: {
+      $jsonSchema: {
+        bsonType: 'object',
+        required: ['email', 'authProvider', 'authId', 'firstName', 'lastName'],
+        properties: {
+          email: {
+            bsonType: 'string',
+          },
+          authProvider: {
+            bsonType: 'string',
+          },
+          authId: {
+            bsonType: 'long',
+          },
+          firstName: {
+            bsonType: 'string',
+          },
+          lastName: {
+            bsonType: 'string',
+          },
+        },
+      },
+    },
+  })
+
+  return db.collection('users')
+})
 
 export default users
-
-// const User = db.define('user', {
-//   id: {
-//     type: Sequelize.INTEGER,
-//     primaryKey: true,
-//     autoIncrement: true,
-//   },
-//   email: {
-//     type: Sequelize.STRING,
-//     allowNull: false,
-//     unique: true,
-//   },
-//   authProvider: {
-//     type: Sequelize.CHAR(24),
-//     allowNull: false,
-//   },
-//   authId: {
-//     type: Sequelize.NUMERIC,
-//     allowNull: false,
-//   },
-//   firstName: Sequelize.STRING,
-//   lastName: Sequelize.STRING,
-// })

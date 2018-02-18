@@ -1,32 +1,35 @@
-import users from './model'
-import Exercise from '../exercise/model'
+import userConnection from './model'
+import exerciseConnection from '../exercise/model'
+import { ObjectID } from 'mongodb'
 
 type IArgs = {
-  id: number,
+  _id: number
 }
 
 export default {
   Query: {
     user: async (root, args: IArgs, ctx, info) => {
-      console.dir(users)
-      const collection = await users
-      console.dir(collection)
-      return collection.findOne({ id: args.id })
+      const users = await userConnection
+      const user = await users.findOne({ _id: new ObjectID(args._id) })
+      return user
     },
     self: async (root, args, ctx, info) => {
-      console.dir(users)
-      const collection = await users
-      console.dir(collection)
-      return collection.findOne({ id: ctx.state.user.id })
+      const users = await userConnection
+      const user = await users.findOne({
+        _id: new ObjectID(ctx.state.user._id),
+      })
+      return user
     },
   },
   User: {
-    exercises (user) {
-      return Exercise.findAll({
-        where: {
-          userId: user.id,
-        },
-      })
+    exercises: async user => {
+      const exercises = await exerciseConnection
+      const found = exercises
+        .find({
+          userId: user._id,
+        })
+        .toArray()
+      return found
     },
   },
 }

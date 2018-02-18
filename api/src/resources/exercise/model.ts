@@ -1,17 +1,29 @@
-import * as Sequelize from 'sequelize'
-import db from '../../connections/db'
-import User from '../users/model'
+import { connect } from '../../connections/mongo'
 
-const Exercise = db.define('exercise', {
-  name: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  description: Sequelize.TEXT,
+const exercises = connect().then(db => {
+  const collection = 'exercises'
+
+  db.createCollection(collection, {
+    validator: {
+      $jsonSchema: {
+        properties: {
+          name: {
+            bsonType: 'string',
+          },
+          description: {
+            bsonType: 'string',
+          },
+          userId: {
+            bsonType: 'objectId',
+          },
+        },
+        required: ['name', 'userId'],
+        uniqueItems: ['name'],
+      },
+    },
+  })
+
+  return db.collection(collection)
 })
 
-// Exercise.belongsTo(User)
-
-Exercise.sync({ force: false })
-
-export default Exercise
+export default exercises

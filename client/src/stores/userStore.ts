@@ -2,7 +2,7 @@ import { observable, action } from 'mobx'
 import agent from '../agent'
 
 export interface IUser {
-  id: number
+  _id: number
   firstName: string
   lastName: string
   email: string
@@ -20,42 +20,53 @@ class UserStore implements IUserStore {
   @action
   getUser(id) {
     const operation = 'user'
-    const result = agent(`
+    const result = agent(
+      `
       query GetUser($id: Int!) {
         ${operation}(id: $id) {
-          id
+          _id
           firstName
           lastName
           email
         }
       }
-    `, { id })
-    result.then(action(({ data, errors }) => {
-      if (errors) return
-      this.user = data[operation]
-    }))
+    `,
+      { id }
+    )
+    result.then(
+      action(({ data, errors }) => {
+        if (errors) return
+        this.user = data[operation]
+      })
+    )
   }
 
   @action
   getSelf() {
     const operation = 'self'
-    const result = agent(`
+    const result = agent(
+      `
       query {
         ${operation} {
-          id
+          _id
           firstName
           lastName
           email
         }
       }
-    `, {})
-    result.then(action(({ data, errors }) => {
-      if (errors) return
-      if (data[operation]) {
-        this.isAuthenticated = true
-        this.user = data[operation]
-      }
-    }))
+    `,
+      {}
+    )
+    result
+      .then(
+        action(({ data, errors }) => {
+          if (errors) return
+          if (data[operation]) {
+            this.isAuthenticated = true
+            this.user = data[operation]
+          }
+        })
+      )
       .catch(err => {
         console.warn(err)
       })

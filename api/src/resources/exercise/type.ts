@@ -2,7 +2,7 @@ import User from '../users/type'
 
 const Exercise = `
   type Exercise {
-    id: ID!
+    _id: ID!
     name: String!
     description: String
     createdAt: Float!
