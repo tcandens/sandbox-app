@@ -2,7 +2,6 @@ import * as Koa from 'koa'
 import * as Router from 'koa-router'
 import * as graphqlHTTP from 'koa-graphql'
 
-import { Op } from 'sequelize'
 import { router as authRouter } from './authentication'
 import { router as maintenanceRouter } from './maintenance'
 import schema from './schema'

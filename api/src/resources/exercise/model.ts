@@ -10,7 +10,7 @@ const Exercise = db.define('exercise', {
   description: Sequelize.TEXT,
 })
 
-Exercise.belongsTo(User)
+// Exercise.belongsTo(User)
 
 Exercise.sync({ force: false })
 
