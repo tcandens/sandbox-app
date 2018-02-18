@@ -3,6 +3,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2017",
+    "sourceMap": true,
+    "outDir": "build",
     "types": [
       "node",
       "koa",

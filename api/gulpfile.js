@@ -9,9 +9,17 @@ const tsProject = ts.createProject('tsconfig.json')
 gulp.task('build-ts', function() {
   return gulp.src('src/**/*.ts')
     .pipe(sourcemaps.init())
+    .pipe(sourcemaps.identityMap())
     .pipe(tsProject())
-    .pipe(sourcemaps.write())
+    .pipe(sourcemaps.write('.', {
+      includeContent: false,
+      sourceRoot: './'
+    }))
     .pipe(gulp.dest("build"))
+})
+
+gulp.task('watch-ts', ['build-ts'], function () {
+  return gulp.watch('src/**/*.ts', ['build-ts'])
 })
 
 gulp.task('default', ['build-ts'], function() {

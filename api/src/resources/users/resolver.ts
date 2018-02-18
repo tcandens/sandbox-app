@@ -8,15 +8,11 @@ type IArgs = {
 export default {
   Query: {
     user: async (root, args: IArgs, ctx, info) => {
-      console.dir(users)
       const collection = await users
-      console.dir(collection)
       return collection.findOne({ id: args.id })
     },
     self: async (root, args, ctx, info) => {
-      console.dir(users)
       const collection = await users
-      console.dir(collection)
       return collection.findOne({ id: ctx.state.user.id })
     },
   },

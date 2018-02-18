@@ -10,18 +10,13 @@
       "name": "Docker: Attach to Node",
       "port": 9229,
       "address": "localhost",
+      "restart": true,
       "localRoot": "${workspaceFolder}",
-      "remoteRoot": "/usr/src/app",
+      "remoteRoot": "/var/www/api",
+      "outFiles": [
+        "${workspaceFoler}/build/**/*.js"
+      ],
       "protocol": "inspector"
     },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/api/gulpfile.js",
-      "outFiles": [
-        "${workspaceFolder}/**/*.js"
-      ]
-    }
   ]
 }
