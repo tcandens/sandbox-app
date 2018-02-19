@@ -1,5 +1,6 @@
 import { observable, computed, action } from 'mobx'
 import agent from '../agent'
+import uuid from 'nanoid'
 
 export interface IExercise {
   _id: number
@@ -57,6 +58,8 @@ class ExerciseStore implements IExerciseStore {
   @action
   addExercise(exercise) {
     const operation = 'addExercise'
+    const tempId = uuid()
+    this.exercisesRegistry.set(`${tempId}`, Object.assign({}, exercise))
     const result = agent(
       `
       mutation CreateExercise($exercise: ExerciseInput) {
@@ -70,8 +73,12 @@ class ExerciseStore implements IExerciseStore {
     )
     result.then(
       action(data => {
-        const { id } = data[operation]
-        this.exercisesRegistry.set(`${id}`, Object.assign({}, exercise, { id }))
+        const _id = data[operation]
+        this.exercisesRegistry.delete(`${tempId}`)
+        this.exercisesRegistry.set(
+          `${_id}`,
+          Object.assign({}, exercise, { _id })
+        )
       })
     )
   }

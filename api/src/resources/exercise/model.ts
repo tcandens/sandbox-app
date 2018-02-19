@@ -19,8 +19,11 @@ const exercises = connect().then(db => {
           deleted: {
             bsonType: 'bool',
           },
+          updatedAt: {
+            bsonType: 'timestamp',
+          },
         },
-        required: ['name', 'userId'],
+        required: ['name', 'userId', 'deleted', 'updatedAt'],
         uniqueItems: ['name'],
       },
     },

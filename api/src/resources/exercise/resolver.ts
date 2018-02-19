@@ -1,5 +1,5 @@
 import exercisesConnection from './model'
-import { ObjectID } from 'mongodb'
+import { ObjectID, Timestamp } from 'mongodb'
 
 export default {
   Query: {
@@ -27,6 +27,7 @@ export default {
       const inserted = await exercises.insertOne({
         ...args.input,
         userId: ctx.state.user._id,
+        updatedAt: Date.now(),
         deleted: false,
       })
       return inserted.insertedId.toHexString()
@@ -43,6 +44,7 @@ export default {
           {
             $set: {
               deleted: true,
+              updatedAt: Date.now(),
             },
           }
         )
