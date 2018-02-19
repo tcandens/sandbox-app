@@ -1,6 +1,5 @@
 import gql from 'nanographql'
 import qs from 'qs'
-import { ExecutionResult } from 'graphql'
 
 export default agent
 
@@ -13,13 +12,9 @@ function agent(query, data = {}, options = {}) {
   }
   return fetch(endpoint, Object.assign(defaultOptions, options))
     .then(response => response.json())
-    .then((response: ExecutionResult) => {
+    .then(response => {
       if (response && response.data) {
         return response.data
-      }
-      if (response && response.errors) {
-        console.dir(response.errors)
-        throw new Error('GraphQL Agent Errors')
       }
     })
     .catch(err => {

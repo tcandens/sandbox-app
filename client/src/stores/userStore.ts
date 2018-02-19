@@ -1,6 +1,5 @@
 import { observable, action } from 'mobx'
 import agent from '../agent'
-import { ExecutionResult } from 'graphql'
 
 export interface IUser {
   _id: number

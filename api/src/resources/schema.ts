@@ -20,7 +20,7 @@ const Query = `
 
   type Mutation {
     addExercise(input: ExerciseInput): String
-    removeExercises(ids: [String]): [Exercise]
+    removeExercises(ids: [String]): Int
   }
 `
 

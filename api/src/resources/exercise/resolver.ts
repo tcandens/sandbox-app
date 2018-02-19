@@ -10,7 +10,14 @@ export default {
     },
     exercises: async (root, args, ctx, info) => {
       const exercises = await exercisesConnection
-      const found = exercises.find({ userId: ctx.state.user._id }).toArray()
+      const found = exercises
+        .find({
+          userId: ctx.state.user._id,
+          deleted: {
+            $ne: true,
+          },
+        })
+        .toArray()
       return found
     },
   },
@@ -20,12 +27,29 @@ export default {
       const inserted = await exercises.insertOne({
         ...args.input,
         userId: ctx.state.user._id,
+        deleted: false,
       })
       return inserted.insertedId.toHexString()
     },
     removeExercises: async (root, args, ctx, info) => {
       const exercises = await exercisesConnection
-      const removed = await exercises
+      try {
+        const removed = await exercises.updateMany(
+          {
+            _id: {
+              $in: args.ids.map(id => new ObjectID(id)),
+            },
+          },
+          {
+            $set: {
+              deleted: true,
+            },
+          }
+        )
+        return removed.matchedCount
+      } catch (error) {
+        console.log(error.stack)
+      }
     },
   },
 }

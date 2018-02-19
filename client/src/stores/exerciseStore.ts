@@ -1,6 +1,5 @@
 import { observable, computed, action } from 'mobx'
 import agent from '../agent'
-import { ExecutionResult } from 'graphql'
 
 export interface IExercise {
   _id: number
@@ -82,10 +81,8 @@ class ExerciseStore implements IExerciseStore {
     const operation = 'removeExercises'
     const result = agent(
       `
-      mutation RemoveExercise($ids: [Int]) {
-        ${operation}(ids: $ids) {
-          _id
-        }
+      mutation RemoveExercise($ids: [String]) {
+        ${operation}(ids: $ids)
       }
     `,
       { ids },
