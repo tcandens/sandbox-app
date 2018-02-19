@@ -4,19 +4,6 @@ services:
     image: mongo:3.6
     ports: 
       - 27017:27017
-  db:
-    image: postgres:alpine
-    restart: always
-    environment:
-      - POSTGRES_USER=trainer
-      - POSTGRES_PASSWORD=tr@1n3r
-    ports:
-      - 5432:5432
-  adminer:
-    image: adminer
-    restart: always
-    ports:
-      - 8081:8080
   api:
     build:
       context: ./api
@@ -26,7 +13,7 @@ services:
     volumes:
       - ./api:/var/www/api
     links:
-      - db:db
+      - mongo:mongo
     env_file:
       - ./secrets.env
     environment:
@@ -34,7 +21,7 @@ services:
       - VIRTUAL_HOST=api.trainer.com
       - VIRTUAL_PORT=3000
     depends_on:
-      - db
+      - mongo
   client:
     build:
       context: ./client

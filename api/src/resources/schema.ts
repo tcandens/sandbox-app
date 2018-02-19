@@ -7,18 +7,20 @@ import { default as exerciseResolver } from './exercise/resolver'
 
 const Query = `
   input ExerciseInput {
-    userId: String!
     name: String!
     description: String
   }
+
   type Query {
     exercise(id: Int!): Exercise
     exercises: [Exercise]
     user(id: Int!): User
     self: User
   }
+
   type Mutation {
-    addExercise(input: ExerciseInput!): Int
+    addExercise(input: ExerciseInput): String
+    removeExercises(ids: [String]): [Exercise]
   }
 `
 

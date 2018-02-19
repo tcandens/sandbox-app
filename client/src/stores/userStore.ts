@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx'
 import agent from '../agent'
+import { ExecutionResult } from 'graphql'
 
 export interface IUser {
   _id: number
@@ -34,8 +35,7 @@ class UserStore implements IUserStore {
       { id }
     )
     result.then(
-      action(({ data, errors }) => {
-        if (errors) return
+      action(data => {
         this.user = data[operation]
       })
     )
@@ -59,8 +59,7 @@ class UserStore implements IUserStore {
     )
     result
       .then(
-        action(({ data, errors }) => {
-          if (errors) return
+        action(data => {
           if (data[operation]) {
             this.isAuthenticated = true
             this.user = data[operation]

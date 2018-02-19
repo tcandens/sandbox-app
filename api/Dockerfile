@@ -5,7 +5,6 @@ COPY ./node_modules node_modules/
 COPY ./package.json package.json
 COPY ./entry.sh entry.sh
 COPY ./src src/
-COPY ./build build/
 
 # Both the main server port and the debug port
 EXPOSE 9229

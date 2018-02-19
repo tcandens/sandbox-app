@@ -1,4 +1,4 @@
-import db from '../../connections/db'
+import { connect } from '../../connections/mongo'
 import * as Router from 'koa-router'
 
 const maintenanceRouter = new Router({
@@ -6,8 +6,7 @@ const maintenanceRouter = new Router({
 })
 
 maintenanceRouter.get('/db', async (ctx, next) => {
-  await db
-    .authenticate()
+  await connect()
     .then(() => {
       ctx.log.info('Database is available.')
       ctx.status = 200

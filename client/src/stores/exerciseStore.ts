@@ -1,8 +1,10 @@
 import { observable, computed, action } from 'mobx'
 import agent from '../agent'
+import { ExecutionResult } from 'graphql'
 
 export interface IExercise {
-  id: number
+  _id: number
+  name: string
   description: string
 }
 
@@ -12,76 +14,92 @@ export interface IExerciseStore {
   exercisesRegistry: any
   getExercises(): void
   addExercise(IExercise): void
-  destroyExercise(id: number): void
+  removeExercises(ids: number[]): void
 }
 
 class ExerciseStore implements IExerciseStore {
   @observable isLoading = false
   @observable exercisesRegistry = observable.map()
-  @computed get exercises() {
+  @computed
+  get exercises() {
     return this.exercisesRegistry.values()
   }
 
-  @action getExercises() {
+  @action
+  getExercises() {
     this.isLoading = true
-    const operation = 'getExercises'
-    return agent(`
+    const operation = 'exercises'
+    return agent(
+      `
       query {
         ${operation} {
-          id,
+          _id,
           name,
           description
         }
       }
-    `, {})
-      .then(({ data }) => data[operation])
-      .then(action((exercises: IExercise[]) => {
-        this.exercisesRegistry.clear()
-        exercises.forEach((exercise: IExercise) => {
-          this.exercisesRegistry.set(`${exercise.id}`, exercise)
+    `,
+      {}
+    )
+      .then(data => {
+        return data[operation]
+      })
+      .then(
+        action((exercises: IExercise[]) => {
+          this.exercisesRegistry.clear()
+          exercises.forEach((exercise: IExercise) => {
+            this.exercisesRegistry.set(`${exercise._id}`, exercise)
+          })
         })
-      }))
-      .finally(action(() => this.isLoading = false))
+      )
+      .finally(action(() => (this.isLoading = false)))
   }
 
   @action
   addExercise(exercise) {
     const operation = 'addExercise'
-    const result = agent(`
+    const result = agent(
+      `
       mutation CreateExercise($exercise: ExerciseInput) {
-        ${operation}(input: $exercise) {
-          id
-        }
+        ${operation} (input: $exercise)
       }
-    `, { exercise }, {
-      method: 'POST'  
-    })
-    result.then(action(({data, errors}) => {
-      if (errors) return
-      const { id } = data[operation]
-      this.exercisesRegistry.set(
-        `${id}`,
-        Object.assign({}, exercise, { id })
-      )
-    }))
+    `,
+      { exercise },
+      {
+        method: 'POST',
+      }
+    )
+    result.then(
+      action(data => {
+        const { id } = data[operation]
+        this.exercisesRegistry.set(`${id}`, Object.assign({}, exercise, { id }))
+      })
+    )
   }
 
   @action
-  destroyExercise(id) {
-    const operation = 'destroyExercise'
-    const result = agent(`
-      mutation DestroyExercise($id: Int!) {
-        ${operation}(id: $id) {
-          id
+  removeExercises(ids) {
+    const operation = 'removeExercises'
+    const result = agent(
+      `
+      mutation RemoveExercise($ids: [Int]) {
+        ${operation}(ids: $ids) {
+          _id
         }
       }
-    `, { id }, {
-      method: 'POST'
-    })
-    result.then(action(({data, errors}) => {
-      if (errors) return
-      this.exercisesRegistry.delete(id)
-    }))
+    `,
+      { ids },
+      {
+        method: 'POST',
+      }
+    )
+    result.then(
+      action(data => {
+        ids.forEach(id => {
+          this.exercisesRegistry.delete(id)
+        })
+      })
+    )
   }
 }
 

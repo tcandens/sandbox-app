@@ -8,6 +8,7 @@ const Exercise = `
     createdAt: Float!
     updatedAt: Float
     user: User
+    deleted: Boolean
   }
 `
 
