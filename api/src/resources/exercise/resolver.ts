@@ -54,4 +54,12 @@ export default {
       }
     },
   },
+  Subscription: {
+    exerciseAdded: {
+      subscribe: () => {},
+      resolve: payload => ({
+        ...payload,
+      }),
+    },
+  },
 }

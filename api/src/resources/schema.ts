@@ -22,12 +22,17 @@ const Query = `
     addExercise(input: ExerciseInput): String
     removeExercises(ids: [String]): Int
   }
+
+  type Subscription {
+    exerciseAdded: Exercise
+  }
 `
 
 const SchemaDefinition = `
   schema {
     query: Query
     mutation: Mutation
+    subscription: Subscription
   }
 `
 

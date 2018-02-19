@@ -3,10 +3,10 @@ import qs from 'qs'
 
 export default agent
 
-const API_ROOT = 'http://api.trainer.com'
+const API_ROOT = 'http://api.trainer.com/graphql'
 
 function agent(query, data = {}, options = {}) {
-  const endpoint = `${API_ROOT}/?${qs.stringify(gql(query)(data))}`
+  const endpoint = `${API_ROOT}?${qs.stringify(gql(query)(data))}`
   const defaultOptions: any = {
     credentials: 'include',
   }
