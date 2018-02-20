@@ -70,7 +70,9 @@ export default {
       subscribe: () => {
         return pubSub.asyncIterator('exercises')
       },
-      resolve: payload => payload.added,
+      resolve: payload => {
+        return payload.added
+      },
     },
   },
 }

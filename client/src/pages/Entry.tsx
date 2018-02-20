@@ -2,6 +2,7 @@ import * as React from 'react'
 import { inject, observer } from 'mobx-react'
 import Hello from '../components/Hello'
 import { IExerciseStore } from '../stores/exerciseStore'
+import { IUserStore } from '../stores/userStore'
 import styled, { css } from 'react-emotion'
 import ListItem from '../components/ListItem'
 import { Link } from 'react-router-dom'
@@ -21,7 +22,7 @@ const StyledGrid = styled('div')`
 
 type IProps = {
   exerciseStore: IExerciseStore
-  userStore
+  userStore: IUserStore
 }
 type IState = {
   name: string
@@ -38,7 +39,9 @@ export default class Entry extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    this.props.exerciseStore.getExercises()
+    if (this.props.userStore.isAuthenticated) {
+      this.props.exerciseStore.getExercises()
+    }
   }
 
   handleInputChange = event => {
