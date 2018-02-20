@@ -65,7 +65,7 @@ class ExerciseStore implements IExerciseStore {
         ${operation} (input: $exercise)
       }
     `,
-      { data: exercise }
+      { data: { exercise } }
     )
     result
       .then(
@@ -94,7 +94,7 @@ class ExerciseStore implements IExerciseStore {
         ${operation}(ids: $ids)
       }
     `,
-      { data: ids }
+      { data: { ids } }
     )
     result.then(
       action(data => {
