@@ -1,6 +1,7 @@
 import { observable, computed, action } from 'mobx'
 import agent from '../agent'
 import uuid from 'nanoid'
+import { SubscriptionClient } from 'subscriptions-transport-ws'
 
 export interface IExercise {
   _id: number
@@ -15,6 +16,7 @@ export interface IExerciseStore {
   getExercises(): void
   addExercise(IExercise): void
   removeExercises(ids: number[]): void
+  listenExercises(): void
 }
 
 class ExerciseStore implements IExerciseStore {
@@ -101,6 +103,40 @@ class ExerciseStore implements IExerciseStore {
         ids.forEach(id => {
           this.exercisesRegistry.delete(id)
         })
+      })
+    )
+  }
+
+  @action
+  listenExercises() {
+    console.log('Creating subscription client')
+
+    const wsClient = new SubscriptionClient(
+      'ws://api.trainer.com:5000/subscriptions',
+      {
+        reconnect: true,
+      }
+    )
+
+    const operation = 'exerciseAdded'
+
+    const exercise$ = wsClient.request({
+      query: `
+        subscription ListenExercises {
+          ${operation} {
+            _id
+            name
+            description
+          }
+        }
+    `,
+    })
+
+    exercise$.subscribe(
+      action(({ data }) => {
+        const added = data[operation]
+        added.fromOther = true
+        this.exercisesRegistry.set(`${added._id}`, added)
       })
     )
   }

@@ -39,9 +39,8 @@ export default class Entry extends React.Component<IProps, IState> {
   }
 
   componentDidMount() {
-    if (this.props.userStore.isAuthenticated) {
-      this.props.exerciseStore.getExercises()
-    }
+    this.props.exerciseStore.getExercises()
+    this.props.exerciseStore.listenExercises()
   }
 
   handleInputChange = event => {
