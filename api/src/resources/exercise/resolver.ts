@@ -1,5 +1,8 @@
 import exercisesConnection from './model'
+import { PubSub } from 'graphql-subscriptions'
 import { ObjectID, Timestamp } from 'mongodb'
+
+const pubSub = new PubSub()
 
 export default {
   Query: {
@@ -23,14 +26,22 @@ export default {
   },
   Mutation: {
     addExercise: async (root, args, ctx, info) => {
-      const exercises = await exercisesConnection
-      const inserted = await exercises.insertOne({
+      const newExercise = {
         ...args.input,
         userId: ctx.state.user._id,
         updatedAt: Date.now(),
         deleted: false,
+      }
+      const exercises = await exercisesConnection
+      const inserted = await exercises.insertOne(newExercise)
+      const _id = inserted.insertedId.toHexString()
+      pubSub.publish('exercises', {
+        added: {
+          ...newExercise,
+          _id,
+        },
       })
-      return inserted.insertedId.toHexString()
+      return _id
     },
     removeExercises: async (root, args, ctx, info) => {
       const exercises = await exercisesConnection
@@ -56,10 +67,10 @@ export default {
   },
   Subscription: {
     exerciseAdded: {
-      subscribe: () => {},
-      resolve: payload => ({
-        ...payload,
-      }),
+      subscribe: () => {
+        return pubSub.asyncIterator('exercises')
+      },
+      resolve: payload => payload.added,
     },
   },
 }

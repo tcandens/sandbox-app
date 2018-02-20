@@ -38,8 +38,7 @@ class ExerciseStore implements IExerciseStore {
           description
         }
       }
-    `,
-      {}
+    `
     )
       .then(data => {
         return data[operation]
@@ -66,21 +65,24 @@ class ExerciseStore implements IExerciseStore {
         ${operation} (input: $exercise)
       }
     `,
-      { exercise },
-      {
-        method: 'POST',
-      }
+      { data: exercise }
     )
-    result.then(
-      action(data => {
-        const _id = data[operation]
-        this.exercisesRegistry.delete(`${tempId}`)
-        this.exercisesRegistry.set(
-          `${_id}`,
-          Object.assign({}, exercise, { _id })
-        )
-      })
-    )
+    result
+      .then(
+        action(data => {
+          const _id = data[operation]
+          this.exercisesRegistry.delete(`${tempId}`)
+          this.exercisesRegistry.set(
+            `${_id}`,
+            Object.assign({}, exercise, { _id })
+          )
+        })
+      )
+      .catch(
+        action(() => {
+          this.exercisesRegistry.delete(`${tempId}`)
+        })
+      )
   }
 
   @action
@@ -92,10 +94,7 @@ class ExerciseStore implements IExerciseStore {
         ${operation}(ids: $ids)
       }
     `,
-      { ids },
-      {
-        method: 'POST',
-      }
+      { data: ids }
     )
     result.then(
       action(data => {

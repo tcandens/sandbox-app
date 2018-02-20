@@ -31,7 +31,7 @@ class UserStore implements IUserStore {
         }
       }
     `,
-      { id }
+      { data: id }
     )
     result.then(
       action(data => {
@@ -53,8 +53,7 @@ class UserStore implements IUserStore {
           email
         }
       }
-    `,
-      {}
+    `
     )
     result
       .then(
