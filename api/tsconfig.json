@@ -3,24 +3,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "target": "es2017",
-    "types": [
-      "node",
-      "koa",
-      "graphql"
-    ],
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "lib": [
-      "es6",
-      "esnext.asynciterable"
-    ]
+    "types": ["node", "koa", "graphql"],
+    "typeRoots": ["./node_modules/@types"],
+    "lib": ["es6", "esnext", "esnext.asynciterable"]
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "build"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "build"]
 }
